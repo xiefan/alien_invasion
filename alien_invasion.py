@@ -20,7 +20,6 @@ class AlienInvasion:
     def run_game(self):
         while True:
             self._check_events()
-            print(self.ship.moving_right)
             self.ship.update()
             self._update_screen()
             for event in pygame.event.get():
@@ -50,6 +49,7 @@ class AlienInvasion:
         # Update images on the screen, and flip to new screen.
         self.screen.fill(self.settings.bg_color)
         self.ship.blitme()
+        pygame.display.flip()
 
 
 if __name__ == '__main__':
