@@ -33,10 +33,10 @@ class Ship:
             self.x -= self.settings.ship_speed
         # Update rect object from self.x
         self.rect.x = self.x
-        print(self.x)
-        print(self.moving_right)
-        print(self.moving_left)
-        print(self.settings.ship_speed)
+        print("The position is at " + str(self.x))
+        print("moving right = " + str(self.moving_right))
+        print("moving left = " + str(self.moving_left))
+        print("the ship's speed is " + str(self.settings.ship_speed))
 
     def blitme(self):
         # Draw the ship at its current location
