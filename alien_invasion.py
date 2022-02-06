@@ -20,6 +20,7 @@ class AlienInvasion:
         pygame.display.set_caption("alien invasion")
         self.asteroids = pygame.sprite.Group()
         self.ship = Ship(self)
+        self.update_asteroids()
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
@@ -136,8 +137,8 @@ class AlienInvasion:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
 
-    def _update_asteroids(self):
-        for x in range(5):
+    def update_asteroids(self):
+        for x in range(self.settings.number_asteroids):
             asteroid = Asteroid(self)
             self.asteroids.add(asteroid)
 
