@@ -20,7 +20,6 @@ class AlienInvasion:
         pygame.display.set_caption("alien invasion")
         self.asteroids = pygame.sprite.Group()
         self.ship = Ship(self)
-        self.update_asteroids()
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
@@ -32,6 +31,7 @@ class AlienInvasion:
             self._update_bullets()
             self._update_aliens()
             self._update_screen()
+            self._update_asteroids()
 
 
     def _update_bullets(self):
@@ -48,6 +48,8 @@ class AlienInvasion:
         # Check for any bullets that have hit aliens.
         # If so, get rid of the bullet and the alien.
         collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        collisions_asteroid = pygame.sprite.groupcollide(self.bullets, self.asteroids, True, True)
+        collisions_alien = pygame.sprite.groupcollide(self.aliens, self.asteroids, True, False)
         if not self.aliens:
             # Destroy existing bullets and create new fleet.
             self.bullets.empty()
@@ -137,10 +139,15 @@ class AlienInvasion:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
 
-    def update_asteroids(self):
-        for x in range(self.settings.number_asteroids):
+    def create_asteroids(self,amount_asteroids):
+        for x in range(amount_asteroids):
             asteroid = Asteroid(self)
             self.asteroids.add(asteroid)
+
+    def _update_asteroids(self):
+        if len(self.asteroids) < self.settings.number_asteroids:
+            # Respawn the asteroids onto the screen
+            self.create_asteroids(self.settings.number_asteroids - len(self.asteroids))
 
     def _update_screen(self):
         # Update images on the screen, and flip to new screen.

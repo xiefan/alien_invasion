@@ -24,7 +24,7 @@ class Asteroid(Sprite):
 
         """Draw the asteroid"""
         asteroid_posx = random.randint(0,ai_game.settings.screen_width)
-        asteroid_posy = random.randint(250,ai_game.settings.screen_height-500)
+        asteroid_posy = random.randint(100,ai_game.settings.screen_height-500)
         print("I spawned in")
         self.rect.x = asteroid_posx
         self.rect.y = asteroid_posy
