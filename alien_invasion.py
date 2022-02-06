@@ -6,6 +6,7 @@ from settings import Settings
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
+from asteroid import Asteroid
 
 class AlienInvasion:
     """Overall class to manager game assets and behavior"""
@@ -17,7 +18,7 @@ class AlienInvasion:
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("alien invasion")
-
+        self.asteroids = pygame.sprite.Group()
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
@@ -31,7 +32,6 @@ class AlienInvasion:
             self._update_aliens()
             self._update_screen()
 
-
     def _update_bullets(self):
         """Update position of bullets and get rid of old bullets"""
         # Update bullets positions
@@ -41,7 +41,7 @@ class AlienInvasion:
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
-        print(len(self.bullets))
+        #print(len(self.bullets))
 
         # Check for any bullets that have hit aliens.
         # If so, get rid of the bullet and the alien.
@@ -135,6 +135,11 @@ class AlienInvasion:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
 
+    def _update_asteroids(self):
+        for x in range(5):
+            asteroid = Asteroid(self)
+            self.asteroids.add(asteroid)
+
     def _update_screen(self):
         # Update images on the screen, and flip to new screen.
         self.screen.fill(self.settings.bg_color)
@@ -142,7 +147,9 @@ class AlienInvasion:
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.aliens.draw(self.screen)
+        self.asteroids.draw(self.screen)
         pygame.display.flip()
+
 
 
 if __name__ == '__main__':
