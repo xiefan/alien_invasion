@@ -7,6 +7,7 @@ from ship import Ship
 from bullet import Bullet
 from alien import Alien
 from asteroid import Asteroid
+from asteroid_explode import AsteroidExplosion
 
 class AlienInvasion:
     """Overall class to manager game assets and behavior"""
@@ -19,6 +20,7 @@ class AlienInvasion:
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("alien invasion")
         self.asteroids = pygame.sprite.Group()
+        self.explosions = pygame.sprite.Group()
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
@@ -50,6 +52,30 @@ class AlienInvasion:
         collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
         collisions_asteroid = pygame.sprite.groupcollide(self.bullets, self.asteroids, True, True)
         collisions_alien = pygame.sprite.groupcollide(self.aliens, self.asteroids, True, False)
+
+
+        x = -1
+        y = -1
+        for asteroid in collisions_asteroid.values():
+           # print("Here is the asteroid:")
+            #print(asteroid)
+           # print(asteroid[0].rect)
+            x = asteroid[0].rect.x + asteroid[0].rect.width/2
+            y = asteroid[0].rect.y + asteroid[0].rect.height/2
+
+        #print(x)
+        #print(y)
+
+        self.create_asteroids_explosion(x, y)
+
+        # What is inside the collisions_asteroid
+        #   collsions_asteroid = {<bullet, asteroid>}
+        # Purpose is to create a asteroid_explosion in the exact position of the asteroid that was hit by the bullet.
+        # If we know the position of the asteroid:
+        #       Create an asteroid_explosion similarly as a bullet/asteroid.
+
+        # we want to crate an asteroid_explosion.
+
         if not self.aliens:
             # Destroy existing bullets and create new fleet.
             self.bullets.empty()
@@ -144,6 +170,11 @@ class AlienInvasion:
             asteroid = Asteroid(self)
             self.asteroids.add(asteroid)
 
+    def create_asteroids_explosion(self, x, y):
+        # Which contains a class that initialize with coordition (x, y)
+        explosion = AsteroidExplosion(self, x, y)
+        self.explosions.add(explosion)
+
     def _update_asteroids(self):
         if len(self.asteroids) < self.settings.number_asteroids:
             # Respawn the asteroids onto the screen
@@ -157,6 +188,7 @@ class AlienInvasion:
             bullet.draw_bullet()
         self.aliens.draw(self.screen)
         self.asteroids.draw(self.screen)
+        self.explosions.draw(self.screen)
         pygame.display.flip()
 
 
